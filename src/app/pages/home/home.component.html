@@ -1,0 +1,22 @@
+<div class="container" [ngClass]="selectedTheme">
+    <p>Válassz egy stílust:</p>
+    <div class="button-group">
+      <button  (click)="selectedTheme = 'light'" [ngClass]="{'active': selectedTheme === 'light'}">Világos</button>
+      <button  (click)="selectedTheme = 'dark'" [ngClass]="{'active': selectedTheme === 'dark'}">Sötét</button>
+  </div>
+  <div>
+    <h1>Üdvözöllek a Műszakicikk Webáruházban</h1>
+    <mat-divider></mat-divider>
+
+
+    <div *ngIf="!isLoggedIn">
+      <p>Jelentkezz be és vásásrolj, kedvező ajánlataink közül</p>
+      <button mat-flat-button color="accent" [routerLink]="['/login']" class="tasks">Bejelentkezés</button>
+    </div>
+
+    <div *ngIf="isLoggedIn">
+      <p>Készen állsz a vásárlásra?</p>
+      <button mat-flat-button color="accent" [routerLink]="['/profile']" class="tasks">Profilom</button>
+    </div>
+  </div>
+</div>

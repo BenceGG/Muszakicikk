@@ -1,0 +1,69 @@
+<div  class="container" [ngClass]="selectedTheme">
+  <div class="profile-container"[ngClass]="selectedTheme">
+  <p>Válassz egy stílust:</p>
+  <div class="button-group">
+    <button  (click)="selectedTheme = 'light'" [ngClass]="{'active': selectedTheme === 'light'}">Világos</button>
+    <button  (click)="selectedTheme = 'dark'" [ngClass]="{'active': selectedTheme === 'dark'}">Sötét</button>
+</div>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Felhasználó profilja</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="profile-info">
+        <div class="avatar-container">
+          <div class="avatar mat-elevation-z2">
+            {{ ProfileObject[selectedIndex].avatar }}
+          </div>
+        </div>
+        <div class="user-details">
+          <h3 class="user-name">{{ ProfileObject[selectedIndex].user_name }}</h3>
+          <div class="user-email">
+            <mat-icon>email</mat-icon>
+            <span>{{ ProfileObject[selectedIndex].email }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cart-orders-section">
+        <button mat-raised-button color="primary" (click)="showCart()">
+         Kosár <mat-icon matListItemIcon>shopping_basket</mat-icon><span matBadge="{{ cart.length }}" matBadgeColor="accent"></span>
+        </button>
+        <button mat-raised-button color="accent" (click)="showOrders()">
+          Előző rendelések <mat-icon matListItemIcon>order-cart</mat-icon><span matBadge="{{ orders.length }}" matBadgeColor="warn"></span>
+        </button>
+      </div>
+
+      <mat-card *ngIf="showCartContent" class="cart-card">
+        <mat-card-header>
+          <mat-card-title>Kosár tartalma</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div *ngFor="let item of cart">
+            <p>{{ item.name }} - {{ item.quantity }} db - {{ item.price }} Ft</p>
+          </div>
+          <p><strong>Végösszeg:</strong> {{ calculateTotal() }} Ft</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button color="primary" (click)="purchase()">Vásárlás</button>
+        </mat-card-actions>
+      </mat-card>
+
+      <mat-card *ngIf="showOrdersContent" class="orders-card">
+        <mat-card-header>
+          <mat-card-title>Rendelési előzmények</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div *ngFor="let order of orders">
+            <p>Rendelés ID: {{ order.id }}</p>
+            <p>Dátum: {{ order.date }}</p>
+            <p>Összeg: {{ order.total }} Ft</p>
+            <hr />
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-card-content>
+  </mat-card>
+</div>
+</div>

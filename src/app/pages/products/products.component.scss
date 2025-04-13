@@ -1,0 +1,126 @@
+.product-container {
+  height: 100%;
+  flex-direction: column;
+  background-color: #fff;
+  padding: 40px 20px;
+  text-align: center;
+  align-items: center;
+  transition: background-color 0.3s ease;
+
+  &.light {
+      background-color: #ffffff;
+      color: #000000;
+  }
+  
+  &.dark {
+      background-color: #1e1e1e;
+      color: #ffffff;
+
+      button {
+        background-color: #444444;
+        color: #ffffff;
+    
+        &:hover {
+          background-color: #666666;
+        }
+      }
+  }
+
+}
+
+.product-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+.product-item {
+  width: 250px;
+}
+.image-container {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}
+.image-container img {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+.rating {
+  margin-top: 10px;
+}
+mat-card {
+  margin-bottom: 20px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+
+  &.light {
+    background-color: #f9f9f9;
+    color: #000000;
+    border: 1px solid #ddd;
+  }
+
+  &.dark {
+    background-color: #2a2a2a;
+    color: #ffffff;
+    border: 1px solid #444;
+  }
+}
+
+mat-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+mat-progress-bar {
+  height: 8px;
+  border-radius: 4px;
+}
+.product-container {
+  transition: background-color 0.3s ease;
+
+  &.light {
+    background-color: #ffffff;
+    color: #000000;
+  }
+
+  &.dark {
+    background-color: #1e1e1e;
+    color: #ffffff;
+  }
+}
+
+.product-item mat-card {
+  transition: background-color 0.3s ease, color 0.3s ease;
+
+  &.light {
+    background-color: #f9f9f9;
+    color: #000000;
+    border: 1px solid #ddd;
+  }
+
+  &.dark {
+    background-color: #2a2a2a;
+    color: #ffffff;
+    border: 1px solid #444;
+  }
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 10px;
+
+  button {
+    padding: 8px 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease;
+
+  }
+}
