@@ -1,0 +1,51 @@
+<div class="product-container" [ngClass]="selectedTheme">
+    <p>Válassz egy stílust:</p>
+    <mat-divider></mat-divider>
+    <div class="button-group">
+      <button  (click)="selectedTheme = 'light'" [ngClass]="{'active': selectedTheme === 'light'}">Világos</button>
+      <button  (click)="selectedTheme = 'dark'" [ngClass]="{'active': selectedTheme === 'dark'}">Sötét</button>
+  </div>
+    <mat-card [ngClass]="selectedTheme">
+      <mat-card-header>
+        <mat-card-title>Termékek</mat-card-title>
+        <mat-form-field appearance="outline">
+          <mat-label>Válassz kategóriát</mat-label>
+          <mat-select (selectionChange)="onCategoryChange($event.value)">
+            <mat-option *ngFor="let category of categories" [value]="category">
+              {{ category }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-card-header>
+  
+      <mat-card-content>
+        <div class="product-list">
+          <div *ngFor="let product of filteredProducts" class="product-item">
+            <mat-card [ngClass]="selectedTheme">
+              <mat-card-header>
+                <mat-card-title>{{ product.name }}</mat-card-title>
+                <mat-card-subtitle>{{ product.brand }}</mat-card-subtitle>
+              </mat-card-header>
+              <div class="image-container">
+                <img mat-card-image [src]="product.image" [alt]="product.name" />
+              </div>
+              <mat-card-content>
+                <p>Kategória: {{ product.category }}</p>
+                <p>Ár: {{ product.price }} Ft</p>
+                <p>Eladások: {{ product.purchased }} db</p>
+                <p>Státusz: {{ product.purchased | salesStatus }}</p>
+                <div class="rating">
+                  <p>Értékelés: {{ product.rating }}%</p>
+                  <mat-progress-bar mode="determinate" [value]="product.rating"></mat-progress-bar>
+                </div>
+              </mat-card-content>
+              <mat-card-actions>
+                <button mat-raised-button color="primary" (click)="addToCart(product)"><mat-icon>shopping_basket</mat-icon></button>
+
+              </mat-card-actions>
+            </mat-card>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
