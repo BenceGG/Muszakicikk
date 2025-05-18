@@ -1,69 +1,120 @@
-<div  class="container" [ngClass]="selectedTheme">
-  <div class="profile-container"[ngClass]="selectedTheme">
-  <p>Válassz egy stílust:</p>
-  <div class="button-group">
-    <button  (click)="selectedTheme = 'light'" [ngClass]="{'active': selectedTheme === 'light'}">Világos</button>
-    <button  (click)="selectedTheme = 'dark'" [ngClass]="{'active': selectedTheme === 'dark'}">Sötét</button>
-</div>
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>Felhasználó profilja</mat-card-title>
-    </mat-card-header>
+<div class="container" [ngClass]="selectedTheme">
+  <div class="profile-container" [ngClass]="selectedTheme">
+    <p>Válassz egy stílust:</p>
+    <div class="button-group">
+      <button (click)="selectedTheme = 'light'" [ngClass]="{ 'active': selectedTheme === 'light' }">Világos</button>
+      <button (click)="selectedTheme = 'dark'" [ngClass]="{ 'active': selectedTheme === 'dark' }">Sötét</button>
+    </div>
 
-    <mat-card-content>
-      <div class="profile-info">
-        <div class="avatar-container">
-          <div class="avatar mat-elevation-z2">
-            {{ ProfileObject[selectedIndex].avatar }}
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Felhasználó profilja</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div *ngIf="isLoading; else profileLoaded">
+          <div class="loading-container">
+            <p>Loading profile data...</p>
           </div>
         </div>
-        <div class="user-details">
-          <h3 class="user-name">{{ ProfileObject[selectedIndex].user_name }}</h3>
-          <div class="user-email">
-            <mat-icon>email</mat-icon>
-            <span>{{ ProfileObject[selectedIndex].email }}</span>
-          </div>
-        </div>
-      </div>
 
-      <div class="cart-orders-section">
-        <button mat-raised-button color="primary" (click)="showCart()">
-         Kosár <mat-icon matListItemIcon>shopping_basket</mat-icon><span matBadge="{{ cart.length }}" matBadgeColor="accent"></span>
-        </button>
-        <button mat-raised-button color="accent" (click)="showOrders()">
-          Előző rendelések <mat-icon matListItemIcon>order-cart</mat-icon><span matBadge="{{ orders.length }}" matBadgeColor="warn"></span>
-        </button>
-      </div>
+        <ng-template #profileLoaded>
+          <ng-container *ngIf="user; else noUser">
+            <div class="profile-info">
+              <div class="avatar-container">
+                <div class="avatar mat-elevation-z2">
+                  {{ getUserInitials() }}
+                </div>
+              </div>
+              <div class="user-details">
+                <h3 class="user-name">{{ user.name.firstname }} {{ user.name.lastname }}</h3>
+                <div class="user-email">
+                  <mat-icon>email</mat-icon>
+                  <span>{{ user.email }}</span>
+                </div>
+              </div>
+              <div class="edit-profile-btn" *ngIf="!editMode">
+                <button mat-icon-button color="primary" (click)="enableEdit()">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </div>
+            </div>
 
-      <mat-card *ngIf="showCartContent" class="cart-card">
-        <mat-card-header>
-          <mat-card-title>Kosár tartalma</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <div *ngFor="let item of cart">
-            <p>{{ item.name }} - {{ item.quantity }} db - {{ item.price }} Ft</p>
-          </div>
-          <p><strong>Végösszeg:</strong> {{ calculateTotal() }} Ft</p>
-        </mat-card-content>
-        <mat-card-actions>
-          <button mat-raised-button color="primary" (click)="purchase()">Vásárlás</button>
-        </mat-card-actions>
-      </mat-card>
+            <!-- Szerkesztő űrlap -->
+            <form *ngIf="editMode" #profileForm="ngForm" (ngSubmit)="saveProfile()" class="edit-profile-form">
+              <mat-form-field appearance="fill">
+                <mat-label>Keresztnév</mat-label>
+                <input matInput name="firstname" [(ngModel)]="user.name.firstname" required>
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Vezetéknév</mat-label>
+                <input matInput name="lastname" [(ngModel)]="user.name.lastname" required>
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Email</mat-label>
+                <input matInput name="email" [(ngModel)]="user.email" required email>
+              </mat-form-field>
+              <div class="edit-profile-actions">
+                <button mat-raised-button color="primary" type="submit">Mentés</button>
+                <button mat-button type="button" (click)="cancelEdit()">Mégse</button>
+              </div>
+            </form>
 
-      <mat-card *ngIf="showOrdersContent" class="orders-card">
-        <mat-card-header>
-          <mat-card-title>Rendelési előzmények</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <div *ngFor="let order of orders">
-            <p>Rendelés ID: {{ order.id }}</p>
-            <p>Dátum: {{ order.date }}</p>
-            <p>Összeg: {{ order.total }} Ft</p>
-            <hr />
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </mat-card-content>
-  </mat-card>
-</div>
+            <div class="cart-orders-section" *ngIf="!editMode">
+              <button mat-raised-button color="primary" (click)="showCart()">
+                Kosár
+                <mat-icon>shopping_basket</mat-icon>
+                <span matBadge="{{ cart.length }}" matBadgeColor="accent"></span>
+              </button>
+
+              <button mat-raised-button color="accent" (click)="showOrders()">
+                Előző rendelések
+                <mat-icon>history</mat-icon>
+                <span matBadge="{{ orders.length }}" matBadgeColor="warn"></span>
+              </button>
+            </div>
+
+            <mat-card *ngIf="showCartContent && !editMode" class="cart-card">
+              <mat-card-header>
+                <mat-card-title>Kosár tartalma</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <div *ngFor="let item of cart">
+                  <p>{{ item.name }} – {{ item.quantity }} db – {{ item.price }} Ft</p>
+                </div>
+                <p><strong>Végösszeg:</strong> {{ calculateTotal() }} Ft</p>
+              </mat-card-content>
+              <mat-card-actions>
+                <button mat-raised-button color="primary" (click)="purchase()" [disabled]="cart.length === 0">Vásárlás</button>
+              </mat-card-actions>
+            </mat-card>
+
+            <mat-card *ngIf="showOrdersContent && !editMode" class="orders-card">
+              <mat-card-header>
+                <mat-card-title>Rendelési előzmények</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <div *ngFor="let orderItem of orders">
+                  <p>Rendelés ID: {{ orderItem.id }}</p>
+                  <p>Dátum: {{ orderItem.date | date: 'medium' }}</p>
+                  <p>Összeg: {{ orderItem.total }} Ft</p>
+                  <mat-divider></mat-divider>
+                </div>
+                <div *ngIf="orders.length === 0">
+                  <p>Nincs rendelésed.</p>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </ng-container>
+
+          <ng-template #noUser>
+            <div class="empty-state">
+              <mat-icon>person_off</mat-icon>
+              <p>Nincs bejelentkezett felhasználó. Kérlek, jelentkezz be.</p>
+            </div>
+          </ng-template>
+        </ng-template>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>

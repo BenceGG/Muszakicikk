@@ -15,6 +15,7 @@
     </div>
 
     <div *ngIf="isLoggedIn">
+      <h2 *ngIf="user">Üdv, {{ user.name | shortName }}!</h2>
       <p>Készen állsz a vásárlásra?</p>
       <button mat-flat-button color="accent" [routerLink]="['/profile']" class="tasks">Profilom</button>
     </div>

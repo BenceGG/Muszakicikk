@@ -1,0 +1,50 @@
+<p>admin works!</p>
+<mat-card>
+  <h2>Új termék hozzáadása</h2>
+  <form (ngSubmit)="addProduct()">
+    <mat-form-field>
+      <input matInput placeholder="Név" [(ngModel)]="newProduct.name" name="name">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Márka" [(ngModel)]="newProduct.brand" name="brand">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Kategória" [(ngModel)]="newProduct.category" name="category">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Ár" type="number" [(ngModel)]="newProduct.price" name="price">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Kép URL" [(ngModel)]="newProduct.image" name="image">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Értékelés" type="number" [(ngModel)]="newProduct.rating" name="rating">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Vásárlások száma" type="number" [(ngModel)]="newProduct.purchased" name="purchased">
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit">Hozzáadás</button>
+  </form>
+</mat-card>
+
+<mat-card *ngFor="let product of products">
+  <h3>{{ product.name }}</h3>
+  <p>{{ product.brand }} - {{ product.category }}</p>
+  <p>{{ product.price }} Ft</p>
+  <p>Rating: {{ product.rating }} / Vásárolt: {{ product.purchased }}x</p>
+  <button mat-button color="accent" (click)="editProduct(product)">Szerkeszt</button>
+  <button mat-button color="warn" (click)="deleteProduct(product.id)">Törlés</button>
+
+<div *ngIf="editingProduct && editingProduct.id === product.id">
+  <form (ngSubmit)="updateProduct()">
+    <mat-form-field>
+      <input matInput [(ngModel)]="editingProduct.name" [name]="'editName' + product.id">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [(ngModel)]="editingProduct.brand" [name]="'editBrand' + product.id">
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit">Mentés</button>
+    <button mat-button type="button" (click)="cancelEdit()">Mégse</button>
+  </form>
+</div>
+</mat-card>

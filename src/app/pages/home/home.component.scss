@@ -28,6 +28,21 @@
     }
 }
 
+h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #1976d2;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
+  transition: color 0.2s;
+}
+
+.container.dark h2 {
+  color: #90caf9;
+  text-shadow: 0 2px 8px rgba(144, 202, 249, 0.12);
+}
 
 .tasks {
     width: 300px;

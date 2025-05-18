@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-
+import { authGuard, publicGuard, adminGuard } from './shared/guards/auth/auth.guard';
 export const routes: Routes = [
     {
         path: 'home',
@@ -7,7 +7,8 @@ export const routes: Routes = [
     },
     {
         path: 'login',
-        loadComponent: () => import('./pages/login/login.component').then(m => m.LoginComponent)
+        loadComponent: () => import('./pages/login/login.component').then(m => m.LoginComponent),
+        canActivate: [publicGuard]
     },
     {
         path: 'products',
@@ -15,11 +16,18 @@ export const routes: Routes = [
     },
     {
         path: 'profile',
-        loadComponent: () => import('./pages/profile/profile.component').then(m => m.ProfileComponent)
+        loadComponent: () => import('./pages/profile/profile.component').then(m => m.ProfileComponent),
+        canActivate: [authGuard]
+    },
+    {
+        path: 'admin',
+        loadComponent: () => import('./pages/admin/admin.component').then(m => m.AdminComponent),
+        canActivate: [adminGuard]
     },
     {
         path: 'signup',
-        loadComponent: () => import('./pages/signup/signup.component').then(m => m.SignupComponent)
+        loadComponent: () => import('./pages/signup/signup.component').then(m => m.SignupComponent),
+        canActivate: [publicGuard]
     },
     {
         path: '',
